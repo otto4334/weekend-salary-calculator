@@ -1,69 +1,48 @@
-$( document ).ready( readyNow );
+console.log("Hello WOrld")
+const submitButton = document.querySelector("#submitButton");
 
 
-let employees = [];
 
-function addEmployees(){
-    // get user input, create  a new object
-    let newEmployee = {
-        firstName: $( '#firstNameIn' ).val(),//don't forget commas
-        lastName: $( '#lastNameIn').val(),
-        iD: $( '#idIn').val(),
-        title: $( '#titleIn').val(),
-        annualSalary: $( '#annualSalaryIn').val(),
-    }
-    // push the new employees into the array 
-    employees.push(newEmployee);
-    // empty inputs
-    $( '#firstNameIn').val( '' )
-    $( '#lastNameIn' ).val( '' )
-    $( '#idIn' ).val( '' )
-    $( '#titleIn' ).val( '' )
-    $( '#annualSalaryIn' ).val( '' )
-    // calculate totalMonthly
-    calculatetotalMonthly();
-    // update DOM
-    displayPurchases();
+function handleSubmit( event ) {
+    event.preventDefault();
+    const tableBody = document.querySelector(".tbody");
+    const firstName = document.querySelector("#firstNameIn").value;
+    const lastName = document.querySelector("#lastNameIn").value;
+    const id = document.querySelector("#idIn").value;
+    const title = document.querySelector("#titleIn").value;
+    const annualSalary = document.querySelector ("#annualSalaryIn").value;
+    const monthly = document.querySelector('#totalMonthly');
+
+    let employees = {
+        firstName: firstName,
+        lastName: lastName,
+        iD: id,
+        title: title,
+        annualSalary: annualSalary
+
+        // TODO - add properties here
+      };
+    let totalSalary = 0
+    totalSalary += Number(employees.annualSalary);
+    combinedMonthly = (totalSalary/12).toFixed(2);
+    monthly.innerHTML = `Total Monthly Salary: $${combinedMonthly}`;
+    
+    tableBody.innerHTML += 
+    `<tr>
+            <td>${firstName}</td>
+            <td>${lastName}</td>
+            <td>${id}</td>
+            <td>${title}</td>
+            <td>${annualSalary}</td>
+            <td><button onclick="removeEmployee(this)" class="remove-employee">Remove</button></td>
+    </t>
+    `;
 }
 
-function calculatetotalMonthly(){
-    //loop through purchases array
-    let totalSalary=0
-    for (let i=0; i<employees.length; i++){
-        totalSalary += Number (employees[i].annualSalary); //callprice from object
-    }
-  
-    // for each purchase, add up total of all prices
-    //  subtract totalPrices form budget for remainingBudget
-    const totalMonthly = totalSalary;
-    //  display remainingBudget
-    let el = $( '#totalMonthly' );
-    el.empty();
-    el.append(totalMonthly);
+function removeEmployee(event) {
+
+    event.closest('tr').remove();
+    totalMonthly();
+
 }
 
-function displayPurchases(){
-    // target output by ID 
-    let el = $( '#employeesOut' )
-    // empty 
-    el.empty();
-    // loop through purchases array
-   for (employee of employees){
-        // for each purchase creat a list item
-        el.append(`<li>${employee.firstName} ${employee.lastName} ${employee.iD} ${employee.title} ${employee.annualSalary}</li>`);
-   }
-   
-   
-}
-
-function readyNow(){//pageload
-// display budget
-// target budgetOut by id
-// let initialBudget = $( '#budgetOut');
-// initialBudget.empty();
-// initialBudget.append( budget );
-// handle click event
-$( '#submitButton' ).on( 'click', addEmployees )
-// initial disply
-calculatetotalMonthly()
-}// end ready now
